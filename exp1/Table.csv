@@ -11,5 +11,5 @@
 100,"child2, main",child1,thread 1 looped 2 times,child1 -> child2
 110,"main, child1",child2,thread 2 looped 2 times,child2 -> main
 120,"child1, child2",main,,main -> child1
-130,"child2, main",child1,,child1 -> child2
+130,child2,child1,,child1 -> child2
 140,empty,child2,,
