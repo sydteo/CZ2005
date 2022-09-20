@@ -38,6 +38,7 @@ class Timer {
 
     int TimeOfNextInterrupt();  // figure out when the timer will generate
 				// its next interrupt 
+    void InsertTimerInterrupt(); // Insert timer interrupt
 
   private:
     bool randomize;		// set if we need to use a random timeout delay
