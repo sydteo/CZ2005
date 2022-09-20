@@ -26,7 +26,11 @@
 
 /* Experiment 2 */
 /* Add code to remove pending interrupt from head of pending list. */
-
+void Interrupt::DeleteTimerInterrupt() {
+	// Remove pending timer interrupt
+	delete pending->Remove();
+	//Schedule
+	// timer->TimerExpired
 // String definitions for debugging messages
 
 static char *intLevelNames[] = { "off", "on"};
