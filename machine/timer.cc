@@ -80,8 +80,11 @@ Timer::TimeOfNextInterrupt()
   /* Experiment 2 */
   /* Update below code so that it returns a fixed time quantum of 40 time ticks */
   
-    if (randomize)
-	return 1 + (Random() % (TimerTicks * 2));
-    else
-	return TimerTicks; 
+//     if (randomize)
+// 	return 1 + (Random() % (TimerTicks * 2));
+//     else
+// 	return TimerTicks; 
+// }
+void Timer::InsertTimerInterrupt() {
+	interrupt->Schedule(TimerHandler, (_int) this, TimeOfNextInterrupt(), TimerInt);
 }
