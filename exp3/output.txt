@@ -1,0 +1,29 @@
+enter TestValueOne, value=0...
+**** Dec thread 3 new value -1
+**** Dec thread 4 new value -2
+**** Inc thread 1 new value 1
+**** Inc thread 2 new value 1
+congratulations! passed.
+enter TestValueMinusOne, value=0...
+**** Inc thread 1 new value 1
+**** Inc thread 2 new value 1
+**** Dec thread 3 new value -1
+**** Dec thread 4 new value -1
+congratulations! passed.
+enter TestConsistency, value=0...
+**** Inc thread 1 new value 1
+**** Inc thread 2 new value 2
+**** Dec thread 3 new value 1
+**** Dec thread 4 new value 0
+congratulations! passed.
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 1070, idle 0, system 1070, user 0
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0, outs 0, tlb miss: 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
