@@ -44,6 +44,32 @@ int VpnToPhyPage(int vpn)
 {
   //your code here to get a physical frame for page vpn
   //you can refer to PageOutPageIn(int vpn) to see how an entry was created in ipt
+  int i;
+
+  // Manually added
+  printf("====================\n\n");
+  printf("VpnToPhyPage triggered, we are now printing the corresponding output.\n");
+  printf("Current page id         = %d\nCurrent page number     = %d\nPage Size               = %d\n\n", currentThread->pid, vpn, PageSize);
+  for (i=0; i<NumPhysPages; i++) {
+	printf("Printing memoryTable[%d]:\n",i);
+	printf("memoryTable[%d].pid      = %d,\n",i, memoryTable[i].pid);
+	printf("memoryTable[%d].vPage    = %d,\n", i, memoryTable[i].vPage);
+	printf("memoryTable[%d].lastUsed = %d\n", i, memoryTable[i].lastUsed);
+	printf("memoryTable[%d].valid    = %d,\n", i, memoryTable[i].valid);
+	printf("memoryTable[%d].dirty    = %d,\n", i, memoryTable[i].dirty);
+	printf("memoryTable[%d].TLBentry = %d,\n\n", i, memoryTable[i].TLBentry);
+  }
+
+  for (i=0; i<NumPhysPages; i++) {
+	if (memoryTable[i].valid && memoryTable[i].pid==currentThread->pid && memoryTable[i].vPage==vpn) {
+	printf("Virtual Page Number found in the IPT table!\n\n");
+	printf("Found at physical frame number: %d\n\n", i);
+	return i;
+	}
+  }
+  printf("Virtual Page Number NOT found in the IPT table!\n\n");
+  printf("====================\n\n");
+  return -1;
 }
 
 //----------------------------------------------------------------------
@@ -57,7 +83,34 @@ void InsertToTLB(int vpn, int phyPage)
   int i = 0; //entry in the TLB
   
   //your code to find an empty in TLB or to replace the oldest entry if TLB is full
+  static int FIFOPointer = 0;
   
+  // Manually added
+  printf("====================\n\n");
+  printf("InsertToTLB triggered, we are now printing the corresponding output.\n");
+  printf("Current page id              = %d\nCurrent page number          = %d\nPage Size                    = %d\nFIFOPointer                  = %d\n\n", currentThread->pid, vpn, PageSize, FIFOPointer);
+
+  for (i=0; i<TLBSize; i++) {
+	printf("Printing TLB[%d]:\n", i);
+	printf("machine->tlb[%d].virtualPage  = %d,\n", i, machine->tlb[i].virtualPage);
+	printf("machine->tlb[%d].physicalPage = %d,\n", i, machine->tlb[i].physicalPage);
+	printf("machine->tlb[%d].valid        = %d,\n", i, machine->tlb[i].valid);
+	printf("machine->tlb[%d].readOnly     = %d,\n", i, machine->tlb[i].readOnly);
+	printf("machine->tlb[%d].use          = %d,\n", i, machine->tlb[i].use);
+	printf("machine->tlb[%d].dirty        = %d\n\n", i, memoryTable[i].dirty);
+  }
+
+  //your code to find an empty in TLB or to replace the oldest entry if TLB is full
+  for (i=0; i<TLBSize; i++) {
+	if (!machine->tlb[i].valid) break;
+  }
+  if (i==TLBSize) {
+	i = FIFOPointer;
+  	// FIFOPointer = (i+1)%TLBSize; // Putting the FIFOPOinter here or below doesn't make a difference to the output
+  }
+  FIFOPointer = (i+1)%TLBSize;  // Putting the FIFOPOinter here or above doesn't make a difference to the output
+  printf("Insert to TLB position at    = %d\n\n", i);
+  printf("====================\n");
   // copy dirty data to memoryTable
   if(machine->tlb[i].valid){
     memoryTable[machine->tlb[i].physicalPage].dirty=machine->tlb[i].dirty;
@@ -208,7 +261,25 @@ int lruAlgorithm(void)
   //your code here to find the physical frame that should be freed 
   //according to the LRU algorithm. 
   int phyPage;
+  int smallest_tick = memoryTable[0].lastUsed;
+  int i;
+
+  // Manually added
+  printf("lruAlgorithm triggered, we are now printing the corresponding output.\n\n");
   
+  for (i=0; i<NumPhysPages; i++) {
+	if (!memoryTable[i].valid) {
+		printf("Insert to physical frame     = %d\n\n", i);
+		printf("====================\n");
+		return i;
+	}
+	if (memoryTable[i].lastUsed<smallest_tick) {
+		phyPage = i;
+		smallest_tick = memoryTable[i].lastUsed;
+	}
+  }
+  printf("Insert to physical frame     = %d\n\n", phyPage);
+  printf("====================\n");
   return phyPage;
 }
 
